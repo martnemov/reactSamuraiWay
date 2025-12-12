@@ -15,6 +15,9 @@ export default defineConfig([
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
     ],
+    // Prettier интегрирован отдельно через .prettierrc; интеграция через eslint-plugin-prettier удалена
+    plugins: {},
+    rules: {},
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
