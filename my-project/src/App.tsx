@@ -1,4 +1,5 @@
 import './App.css'
+import {useState} from "react";
 
 const tasks =
     [
@@ -25,7 +26,7 @@ const tasks =
         },
     ]
 
-const backgroundColor: Record<number, string>  = {
+const backgroundColor: Record<number, string> = {
     0: '#ffffff',
     1: '#ffd7b5',
     2: '#ffb38a',
@@ -33,7 +34,10 @@ const backgroundColor: Record<number, string>  = {
     4: '#ff6700',
 }
 
+
 export function App() {
+    const [id, setId] = useState<number | null>(null);
+
     if (!tasks) {
         return <h1>Загрузка...</h1>
     }
@@ -44,11 +48,14 @@ export function App() {
 
     return (
         <>
-            <div>
-                <ul style={{display: "flex", flexDirection: 'column', gap: '20px'}}>
+            <div style={{display: 'flex', flexDirection: 'column', padding: '20px'}}>
+                <button onClick={() => setId(null)} style={{width: 'fit-content'}}>Сбросить выделение</button>
+                <ul style={{display: "flex", flexDirection: 'column', gap: '20px', paddingInlineStart: '0'}}>
                     {tasks.map(task =>
-                        <li style={{border: '4px solid black', listStyleType: 'none', width: '300px', padding: '20px',
-                        backgroundColor: backgroundColor[task.priority]}}
+                        <li onClick={() => setId(task.id)} style={{
+                            border: id === task.id ? '4px solid blue' : '4px solid black' , listStyleType: 'none', width: '300px', padding: '20px',
+                            backgroundColor: backgroundColor[task.priority]
+                        }}
                             key={task.id}>
                             <div>
                                 <span>Заголовок:</span>
