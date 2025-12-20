@@ -53,7 +53,10 @@ export function App() {
                 <ul style={{display: "flex", flexDirection: 'column', gap: '20px', paddingInlineStart: '0'}}>
                     {tasks.map(task =>
                         <li onClick={() => setId(task.id)} style={{
-                            border: id === task.id ? '4px solid blue' : '4px solid black' , listStyleType: 'none', width: '300px', padding: '20px',
+                            border: id === task.id ? '4px solid blue' : '4px solid black',
+                            listStyleType: 'none',
+                            width: '300px',
+                            padding: '20px',
                             backgroundColor: backgroundColor[task.priority]
                         }}
                             key={task.id}>
