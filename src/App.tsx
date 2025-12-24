@@ -1,30 +1,5 @@
 import './App.css'
-import {useState} from "react";
-
-const tasks =
-    [
-        {
-            id: 1,
-            title: "Купить продукты на неделю",
-            isDone: false,
-            addedAt: "1 сентября",
-            priority: 2,
-        },
-        {
-            id: 2,
-            title: "Полить цветы",
-            isDone: true,
-            addedAt: "2 сентября",
-            priority: 0,
-        },
-        {
-            id: 3,
-            title: "Сходить на тренировку",
-            isDone: true,
-            addedAt: "3 сентября",
-            priority: 1,
-        },
-    ]
+import {useEffect, useState} from "react";
 
 const backgroundColor: Record<number, string> = {
     0: '#ffffff',
@@ -36,7 +11,18 @@ const backgroundColor: Record<number, string> = {
 
 
 export function App() {
-    const [id, setId] = useState<number | null>(null);
+    const [tasks, setTasks] = useState<any[] | null >(null);
+    const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
+
+    useEffect(() => {
+        fetch("https://trelly.it-incubator.app/api/1.0/boards/tasks", {
+            headers: {
+                "api-key": "4a7ea144-e8fe-4d8b-adc4-07daf9c9dd07"
+            }
+        })
+            .then(response => response.json())
+            .then(json => setTasks(json.data))
+    }, [])
 
     if (!tasks) {
         return <h1>Загрузка...</h1>
@@ -45,35 +31,39 @@ export function App() {
     if (!tasks.length) {
         return <h1>Задачи отстутствуют</h1>
     }
+    
 
     return (
         <>
             <div style={{display: 'flex', flexDirection: 'column', padding: '20px'}}>
-                <button onClick={() => setId(null)} style={{width: 'fit-content'}}>Сбросить выделение</button>
+                <button onClick={() => setSelectedTaskId(null)} style={{width: 'fit-content'}}>Сбросить выделение</button>
                 <ul style={{display: "flex", flexDirection: 'column', gap: '20px', paddingInlineStart: '0'}}>
-                    {tasks.map(task =>
-                        <li onClick={() => setId(task.id)} style={{
-                            border: id === task.id ? '4px solid blue' : '4px solid black',
+                    {tasks?.map(task => {
+                        return (
+                        <li onClick={() => setSelectedTaskId(task.id)} style={{
+                            border: selectedTaskId === task.id ? '4px solid blue' : '4px solid black',
                             listStyleType: 'none',
                             width: '300px',
                             padding: '20px',
-                            backgroundColor: backgroundColor[task.priority]
+                            backgroundColor: backgroundColor[task.attributes.priority]
                         }}
                             key={task.id}>
                             <div>
                                 <span>Заголовок:</span>
                                 <span
-                                    style={{textDecorationLine: task.isDone ? 'line-through' : 'none'}}>{task.title}</span>
+                                    style={{textDecorationLine: task.attributes.status === 2 ? 'line-through' : 'none'}}>{task.attributes.title}</span>
                             </div>
                             <div>
                                 <span>Статус:</span>
-                                <input type="checkbox" defaultChecked={task.isDone}/>
+                                <input type="checkbox" defaultChecked={task.attributes.status === 2}/>
                             </div>
                             <div>
                                 <span>Дата создания задачи:</span>
-                                <span>{task.addedAt}</span>
+                                <span>{new Date(task.attributes.addedAt).toLocaleDateString()}</span>
                             </div>
-                        </li>)}
+                        </li>
+                        )
+                    })}
                 </ul>
             </div>
         </>
