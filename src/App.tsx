@@ -15,6 +15,7 @@ export function App() {
     const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
     const [selectedTask, setSelectedTask] = useState<number | null>(null);
     const [isTaskLoading, setIsTaskLoading] = useState<boolean>(false);
+    const [boardId, setBoardId] = useState(null)
 
     useEffect(() => {
         fetch("https://trelly.it-incubator.app/api/1.0/boards/tasks", {
@@ -25,6 +26,23 @@ export function App() {
             .then(response => response.json())
             .then(json => setTasks(json.data))
     }, [])
+
+    useEffect(() => {
+        fetch(
+            "https://trelly.it-incubator.app/api/1.0/boards/" + boardId + "/tasks/" + selectedTaskId,
+            {
+                headers: {
+                    "api-key": "4a7ea144-e8fe-4d8b-adc4-07daf9c9dd07"
+                },
+            },)
+            .then(response => response.json())
+            .then(json => {
+                setSelectedTask(json.data);
+                setIsTaskLoading(false)
+            })
+            .catch(() => setIsTaskLoading(false))
+    }, [selectedTaskId])
+
 
     if (!tasks) {
         return <h1>Загрузка...</h1>
@@ -37,12 +55,15 @@ export function App() {
 
     return (
         <>
-            <button onClick={() => {
-                setSelectedTaskId(null);
-                setSelectedTask(null)
-            }
-            } style={{width: 'fit-content'}}>Сбросить выделение
-            </button>
+            <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                <button onClick={() => {
+                    setSelectedTaskId(null);
+                    setSelectedTask(null)
+                }
+                } style={{width: 'fit-content'}}>Сбросить выделение
+                </button>
+
+            </div>
             <div style={{display: 'flex', flexDirection: 'row', padding: '20px', gap: '20px'}}>
                 <div>
                     <ul style={{display: "flex", flexDirection: 'column', gap: '20px', paddingInlineStart: '0'}}>
@@ -52,20 +73,7 @@ export function App() {
                                     setSelectedTaskId(task.id);
                                     setSelectedTask(null);
                                     setIsTaskLoading(true);
-
-                                    fetch(
-                                        "https://trelly.it-incubator.app/api/1.0/boards/" + task.attributes.boardId + "/tasks/" + task.id,
-                                        {
-                                            headers: {
-                                                "api-key": "4a7ea144-e8fe-4d8b-adc4-07daf9c9dd07"
-                                            },
-                                        },)
-                                        .then(response => response.json())
-                                        .then(json => {
-                                            setSelectedTask(json.data);
-                                            setIsTaskLoading(false)
-                                        })
-                                        .catch(() => setIsTaskLoading(false))
+                                    setBoardId(task.data?.attributes.boardId)
                                 }}
                                     style={{
                                         border: selectedTaskId === task.id ? '4px solid blue' : '4px solid black',
