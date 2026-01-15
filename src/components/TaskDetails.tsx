@@ -27,7 +27,7 @@ export function TaskDetails() {
 
     return (
         <>
-            <div style={{display: 'flex', flexDirection: 'row', padding: '20px', gap: '20px'}}>
+            <div style={{display: 'flex', flexDirection: 'row', gap: '20px'}}>
                 <div style={{width: '300px', border: '4px solid black', margin: '15px 0', padding: '0 20px'}}>
                     <h3>Детали задачи</h3>
                     <div>{isTaskLoading ?
