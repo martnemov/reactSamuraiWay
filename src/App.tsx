@@ -4,6 +4,8 @@ import {ProductList} from "./components/ProductList.tsx";
 
 
 export function App() {
+    console.log('🔶 App')
+
     const [boardId, setBoardId] = useState(null)
     const products = [
         { id: 1, name: "Хлеб", price: 30, category: "Выпечка" },
