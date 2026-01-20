@@ -1,8 +1,6 @@
 import {useState} from "react";
 
 export function ProductItem(props) {
-    console.log('🧺 ProductItem')
-
     const [inCart, setInCart] = useState(false)
 
     return (
