@@ -1,8 +1,6 @@
 import {useEffect, useState} from "react";
 
-export function TaskDetails() {
-    const selectedTaskId = "07b51554-f680-4b5f-8e81-dbcbe32d08cc";
-    const boardId = "e11c9480-dd73-4b08-a5fd-452465467805";
+export function TaskDetails(props) {
     const isTaskLoading = false;
 
     const [selectedTask, setSelectedTask] = useState<number | null>(null);
@@ -11,7 +9,7 @@ export function TaskDetails() {
 
     useEffect(() => {
         fetch(
-            "https://trelly.it-incubator.app/api/1.0/boards/" + boardId + "/tasks/" + selectedTaskId,
+            "https://trelly.it-incubator.app/api/1.0/boards/" + props.boardId + "/tasks/" + props.selectedTaskId,
             {
                 headers: {
                     "api-key": "4a7ea144-e8fe-4d8b-adc4-07daf9c9dd07"
@@ -23,7 +21,7 @@ export function TaskDetails() {
                 // setIsTaskLoading(false)
             })
             // .catch(() => setIsTaskLoading(false))
-    }, [selectedTaskId])
+    }, [props.selectedTaskId])
 
     return (
         <>

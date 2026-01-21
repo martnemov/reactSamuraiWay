@@ -29,7 +29,7 @@ export function App() {
             {/*    {products.map((p) => <ProductList key={p.id} item={p}/>)}*/}
             {/*</div>*/}
 
-            <Game/>
+            {/*<Game/>*/}
         </>
     )
 }

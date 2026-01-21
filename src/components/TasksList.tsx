@@ -1,18 +1,8 @@
 import {useEffect, useState} from "react";
+import {TaskItem} from "./TaskItem.tsx";
 
-export function TasksList() {
-    const backgroundColor: Record<number, string> = {
-        0: '#ffffff',
-        1: '#ffd7b5',
-        2: '#ffb38a',
-        3: '#ff9248',
-        4: '#ff6700',
-    }
-
+export function TasksList(props) {
     const [tasks, setTasks] = useState<any[] | null>(null);
-    const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
-    const [isTaskLoading, setIsTaskLoading] = useState<boolean>(false);
-
 
     useEffect(() => {
         fetch("https://trelly.it-incubator.app/api/1.0/boards/tasks", {
@@ -38,39 +28,11 @@ export function TasksList() {
             <div>
                 <ul style={{display: "flex", flexDirection: 'column', gap: '20px', paddingInlineStart: '0'}}>
                     {tasks?.map(task => {
-                        return (
-                            <li onClick={() => {
-                                setSelectedTaskId(task.id);
-                                // setSelectedTask(null);
-                                setIsTaskLoading(true);
-                               // setBoardId(task.data?.attributes.boardId)
-                            }}
-                                style={{
-                                    border: selectedTaskId === task.id ? '4px solid blue' : '4px solid black',
-                                    listStyleType: 'none',
-                                    width: '300px',
-                                    padding: '20px',
-                                    backgroundColor: backgroundColor[task.attributes.priority]
-                                }}
-                                key={task.id}>
-                                <div>
-                                    <span>Заголовок:</span>
-                                    <span
-                                        style={{
-                                            textDecorationLine: task.attributes.status === 2 ?
-                                                'line-through' : 'none'
-                                        }}>{task.attributes.title}</span>
-                                </div>
-                                <div>
-                                    <span>Статус:</span>
-                                    <input type="checkbox" defaultChecked={task.attributes.status === 2}/>
-                                </div>
-                                <div>
-                                    <span>Дата создания задачи:</span>
-                                    <span>{new Date(task.attributes.addedAt).toLocaleDateString()}</span>
-                                </div>
-                            </li>
-                        )
+                        return <TaskItem key={task.id}
+                                         task={task}
+                                         isSelected={props.selectedTaskId === task.id}
+                                         onTaskSelected={props.handleTaskSelected}
+                                         onBoardSelected={props.handleBoardSelected}/>
                     })}
                 </ul>
             </div>
