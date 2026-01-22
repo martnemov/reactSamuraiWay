@@ -1,8 +1,9 @@
 import {useEffect, useState} from "react";
 import {TaskItem} from "./TaskItem.tsx";
 
-export function TasksList(props) {
+export function TasksList({selectedTaskId, handleTaskSelected, handleBoardSelected, handleTaskLoading}) {
     const [tasks, setTasks] = useState<any[] | null>(null);
+    const handleReset = () => handleTaskSelected(null)
 
     useEffect(() => {
         fetch("https://trelly.it-incubator.app/api/1.0/boards/tasks", {
@@ -24,19 +25,19 @@ export function TasksList(props) {
     }
 
     return (
-        <>
             <div>
+                <button onClick={handleReset}>Сброс</button>
                 <ul style={{display: "flex", flexDirection: 'column', gap: '20px', paddingInlineStart: '0'}}>
                     {tasks?.map(task => {
                         return <TaskItem key={task.id}
                                          task={task}
-                                         isSelected={props.selectedTaskId === task.id}
-                                         onTaskSelected={props.handleTaskSelected}
-                                         onBoardSelected={props.handleBoardSelected}/>
+                                         isSelected={selectedTaskId === task.id}
+                                         onTaskSelected={handleTaskSelected}
+                                         onBoardSelected={handleBoardSelected}
+                                         onTaskLoading={handleTaskLoading}/>
                     })}
                 </ul>
             </div>
 
-        </>
     )
 }

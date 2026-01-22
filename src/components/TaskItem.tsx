@@ -1,6 +1,5 @@
-import {useState} from "react";
 
-export function TaskItem(props) {
+export function TaskItem({task, isSelected, onTaskSelected, onBoardSelected, onTaskLoading}) {
     const backgroundColor: Record<number, string> = {
         0: '#ffffff',
         1: '#ffd7b5',
@@ -9,38 +8,37 @@ export function TaskItem(props) {
         4: '#ff6700',
     }
 
-    const [isTaskLoading, setIsTaskLoading] = useState<boolean>(false);
-
+    const handleTaskClick = () => {
+        onTaskSelected?.(task.id);
+        onBoardSelected?.(task.attributes.boardId)
+        onTaskLoading(true);
+    }
 
     return (
-        <li onClick={() => {
-            props.onTaskSelected?.(props.task.id);
-            props.onBoardSelected?.(props.task.data?.attributes.boardId)
-            setIsTaskLoading(true);
-        }}
+        <li onClick={handleTaskClick}
             style={{
-                border: props.isSelected ? '4px solid blue' : '4px solid black',
+                border: isSelected ? '4px solid blue' : '4px solid black',
                 listStyleType: 'none',
                 width: '300px',
                 padding: '20px',
-                backgroundColor: backgroundColor[props.task.attributes.priority]
+                backgroundColor: backgroundColor[task.attributes.priority]
             }}
-            key={props.task.id}>
+            key={task.id}>
             <div>
                 <span>Заголовок:</span>
                 <span
                     style={{
-                        textDecorationLine: props.task.attributes.status === 2 ?
+                        textDecorationLine: task.attributes.status === 2 ?
                             'line-through' : 'none'
-                    }}>{props.task.attributes.title}</span>
+                    }}>{task.attributes.title}</span>
             </div>
             <div>
                 <span>Статус:</span>
-                <input type="checkbox" defaultChecked={props.task.attributes.status === 2}/>
+                <input type="checkbox" defaultChecked={task.attributes.status === 2}/>
             </div>
             <div>
                 <span>Дата создания задачи:</span>
-                <span>{new Date(props.task.attributes.addedAt).toLocaleDateString()}</span>
+                <span>{new Date(task.attributes.addedAt).toLocaleDateString()}</span>
             </div>
         </li>
     )
