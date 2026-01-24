@@ -1,14 +1,15 @@
 import {TasksList} from "./TasksList.tsx";
 import {TaskDetails} from "./TaskDetails.tsx";
-import {useState} from "react";
+import {useCallback, useState} from "react";
 
 export function MainPage() {
-    const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
+    const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
     const [boardId, setBoardId] = useState<string | null>(null);
     const [isTaskLoading, setIsTaskLoading] = useState<boolean>(false);
-    const handleTaskSelected =(id) => setSelectedTaskId(id);
-    const handleBoardSelected = (id) => setBoardId(id);
-    const handleTaskLoading = (b)=> setIsTaskLoading(b);
+
+    const handleTaskSelected = (id: string | null) => setSelectedTaskId(id);
+    const handleBoardSelected = (id: string | null) => setBoardId(id);
+    const handleTaskLoading = useCallback((b: boolean) => setIsTaskLoading(b), []);
 
     return (
         <div>

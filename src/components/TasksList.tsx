@@ -1,8 +1,21 @@
 import {useEffect, useState} from "react";
 import {TaskItem} from "./TaskItem.tsx";
+import type {Task} from "./TaskDetails.tsx";
 
-export function TasksList({selectedTaskId, handleTaskSelected, handleBoardSelected, handleTaskLoading}) {
-    const [tasks, setTasks] = useState<any[] | null>(null);
+type TasksListProps = {
+    selectedTaskId: string | null;
+    handleTaskSelected: (taskId: string | null) => void;
+    handleBoardSelected: (boardId: string | null) => void;
+    handleTaskLoading: (b: boolean) => void;
+}
+
+export function TasksList({
+                              selectedTaskId,
+                              handleTaskSelected,
+                              handleBoardSelected,
+                              handleTaskLoading
+                          }: TasksListProps) {
+    const [tasks, setTasks] = useState<Task[] | null>(null);
     const handleReset = () => handleTaskSelected(null)
 
     useEffect(() => {
@@ -25,19 +38,19 @@ export function TasksList({selectedTaskId, handleTaskSelected, handleBoardSelect
     }
 
     return (
-            <div>
-                <button onClick={handleReset}>Сброс</button>
-                <ul style={{display: "flex", flexDirection: 'column', gap: '20px', paddingInlineStart: '0'}}>
-                    {tasks?.map(task => {
-                        return <TaskItem key={task.id}
-                                         task={task}
-                                         isSelected={selectedTaskId === task.id}
-                                         onTaskSelected={handleTaskSelected}
-                                         onBoardSelected={handleBoardSelected}
-                                         onTaskLoading={handleTaskLoading}/>
-                    })}
-                </ul>
-            </div>
+        <div>
+            <button onClick={handleReset}>Сброс</button>
+            <ul style={{display: "flex", flexDirection: 'column', gap: '20px', paddingInlineStart: '0'}}>
+                {tasks?.map(task => {
+                    return <TaskItem key={task.id}
+                                     task={task}
+                                     isSelected={selectedTaskId === task.id}
+                                     onTaskSelected={handleTaskSelected}
+                                     onBoardSelected={handleBoardSelected}
+                                     onTaskLoading={handleTaskLoading}/>
+                })}
+            </ul>
+        </div>
 
     )
 }

@@ -1,5 +1,14 @@
+import type {Task} from "./TaskDetails.tsx";
 
-export function TaskItem({task, isSelected, onTaskSelected, onBoardSelected, onTaskLoading}) {
+type TaskItemProps = {
+    task: Task;
+    isSelected: boolean;
+    onTaskSelected: (taskId: string | null) => void;
+    onBoardSelected: (boardId: string | null) => void;
+    onTaskLoading: (b: boolean) => void;
+}
+
+export function TaskItem({task, isSelected, onTaskSelected, onBoardSelected, onTaskLoading}: TaskItemProps) {
     const backgroundColor: Record<number, string> = {
         0: '#ffffff',
         1: '#ffd7b5',
