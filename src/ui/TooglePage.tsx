@@ -11,20 +11,12 @@ function useToggle(initialValue: boolean) {
   return { isOn, toggle, setIsOn, reset };
 }
 
-function useText(initialText: string) {
-  const [text, setText] = useState(initialText);
-  const clear = () => setText('');
-  const toUpperCase = () => setText(text.toUpperCase());
-  const toLowerCase = () => setText(text.toLowerCase());
-  return { text, setText, clear, toUpperCase, toLowerCase };
-}
-
 export const GreetingCard = () => {
   const { text, setText, clear, toUpperCase, toLowerCase } = useText('Привет!');
 
   return (
     <div>
-      <div>💬 {text}</div>
+      <h2>💬 {text || '...'}</h2>
       <button onClick={toUpperCase}>ГРОМКО</button>
       <button onClick={toLowerCase}>тихо</button>
       <button onClick={() => setText("Сказать 'Добро пожаловать!'")}>
@@ -40,7 +32,7 @@ export const TitleEditor = () => {
 
   return (
     <div>
-      <h2>{text}</h2>
+      <h2>{text || 'Пусто'}</h2>
       <button onClick={toUpperCase}>ВЕРХНИЙ РЕГИСТР</button>
       <button onClick={toLowerCase}>нижний регистр</button>
       <button onClick={() => setText('Новый заголовок')}>Изменить на 'Новый заголовок'</button>
@@ -90,12 +82,29 @@ export const NotificationSwitch = () => {
   );
 };
 
+function useText(initialText: string = '') {
+  const [text, setText] = useState(initialText);
+  const clear = () => setText('');
+  const toUpperCase = () => setText(text.toUpperCase());
+  const toLowerCase = () => setText(text.toLowerCase());
+  return { text, setText, clear, toUpperCase, toLowerCase };
+}
+
 export const TogglePage = () => {
   return (
     <div>
       <LightSwitch />
       <VisibilityToggle />
       <NotificationSwitch />
+      <TitleEditor />
+      <GreetingCard />
+    </div>
+  );
+};
+
+export const TextPage = () => {
+  return (
+    <div>
       <TitleEditor />
       <GreetingCard />
     </div>
