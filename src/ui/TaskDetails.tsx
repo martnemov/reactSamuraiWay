@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { getTask, type TaskDetailsData } from '../dal/api.ts';
+import { type TaskDetailsData } from '../dal/api.ts';
+import { useTaskDetails } from '../bll/useTaskDetails.ts';
 
 type TaskDetailsProps = {
   selectedTaskId: string | null;
@@ -42,20 +42,12 @@ export function TaskDetails({
   handleTaskLoading,
   isTaskLoading,
 }: TaskDetailsProps) {
-  const [selectedTask, setSelectedTask] = useState<TaskDetailsData | null>(null);
-
-  useEffect(() => {
-    if (!selectedTaskId || !boardId) return;
-
-    getTask(boardId, selectedTaskId)
-      .then((json) => setSelectedTask(json.data))
-      .finally(() => handleTaskLoading(false));
-  }, [selectedTaskId, boardId, handleTaskLoading]);
+  const { taskDetails } = useTaskDetails(selectedTaskId, boardId, handleTaskLoading);
 
   const renderContent = () => {
     if (isTaskLoading) return <p className="text-gray-400">Загрузка...</p>;
-    if (!selectedTask) return <p className="text-gray-400">Задача не выбрана</p>;
-    return <TaskContent task={selectedTask} />;
+    if (!taskDetails) return <p className="text-gray-400">Задача не выбрана</p>;
+    return <TaskContent task={taskDetails} />;
   };
 
   return (

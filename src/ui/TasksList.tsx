@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
 import { TaskItem } from './TaskItem.tsx';
-import { getTasks, type GlobalTaskListItemJsonApiData } from '../dal/api.ts';
+import { useTasks } from '../bll/useTasks.ts';
 
 type TasksListProps = {
   selectedTaskId: string | null;
@@ -15,12 +14,7 @@ export function TasksList({
   handleBoardSelected,
   handleTaskLoading,
 }: TasksListProps) {
-  const [tasks, setTasks] = useState<GlobalTaskListItemJsonApiData[] | null>(null);
-  const handleReset = () => handleTaskSelected(null);
-
-  useEffect(() => {
-    getTasks().then((json) => setTasks(json.data));
-  }, []);
+  const { tasks, handleReset } = useTasks(handleTaskSelected);
 
   if (!tasks) {
     return <h1>Загрузка...</h1>;

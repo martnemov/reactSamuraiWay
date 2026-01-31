@@ -1,15 +1,16 @@
 import { TasksList } from './TasksList.tsx';
 import { TaskDetails } from './TaskDetails.tsx';
-import { useCallback, useState } from 'react';
+import { useTaskSelection } from '../bll/useTaskSelection.ts';
 
 export function MainPage() {
-  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
-  const [boardId, setBoardId] = useState<string | null>(null);
-  const [isTaskLoading, setIsTaskLoading] = useState<boolean>(false);
-
-  const handleTaskSelected = (id: string | null) => setSelectedTaskId(id);
-  const handleBoardSelected = (id: string | null) => setBoardId(id);
-  const handleTaskLoading = useCallback((b: boolean) => setIsTaskLoading(b), []);
+  const {
+    selectedTaskId,
+    boardId,
+    isTaskLoading,
+    handleTaskSelected,
+    handleBoardSelected,
+    handleTaskLoading,
+  } = useTaskSelection();
 
   return (
     <div>
