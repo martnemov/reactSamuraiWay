@@ -1,4 +1,6 @@
 import type { GlobalTaskListItemJsonApiData } from '../dal/api.ts';
+import styles from './TaskItem.module.css';
+import clsx from 'clsx';
 
 type TaskItemProps = {
   task: GlobalTaskListItemJsonApiData;
@@ -15,13 +17,15 @@ export function TaskItem({
   onBoardSelected,
   onTaskLoading,
 }: TaskItemProps) {
-  const backgroundColor: Record<number, string> = {
-    0: '#ffffff',
-    1: '#ffd7b5',
-    2: '#ffb38a',
-    3: '#ff9248',
-    4: '#ff6700',
+  const priorityClass: Record<number, string> = {
+    0: styles.priority0,
+    1: styles.priority1,
+    2: styles.priority2,
+    3: styles.priority3,
+    4: styles.priority4,
   };
+
+  const isDone = task.attributes.status === 2;
 
   const handleTaskClick = () => {
     onTaskSelected?.(task.id);
@@ -32,28 +36,20 @@ export function TaskItem({
   return (
     <li
       onClick={handleTaskClick}
-      style={{
-        border: isSelected ? '4px solid blue' : '4px solid black',
-        listStyleType: 'none',
-        width: '300px',
-        padding: '20px',
-        backgroundColor: backgroundColor[task.attributes.priority],
-      }}
       key={task.id}
+      className={clsx(
+        styles.task,
+        isSelected && styles.selected,
+        priorityClass[task.attributes.priority]
+      )}
     >
       <div>
         <span>Заголовок:</span>
-        <span
-          style={{
-            textDecorationLine: task.attributes.status === 2 ? 'line-through' : 'none',
-          }}
-        >
-          {task.attributes.title}
-        </span>
+        <span className={clsx(isDone && styles.completed)}>{task.attributes.title}</span>
       </div>
       <div>
         <span>Статус:</span>
-        <input type="checkbox" defaultChecked={task.attributes.status === 2} />
+        <input type="checkbox" defaultChecked={isDone} />
       </div>
       <div>
         <span>Дата создания задачи:</span>

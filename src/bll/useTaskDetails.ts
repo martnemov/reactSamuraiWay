@@ -8,8 +8,16 @@ export function useTaskDetails(
 ) {
   const [taskDetails, setTaskDetails] = useState<TaskDetailsData | null>(null);
 
+  if (!selectedTaskId || !boardId || !handleTaskLoading) {
+    if (taskDetails !== null) {
+      setTaskDetails(null);
+    }
+  }
+
   useEffect(() => {
     if (!selectedTaskId || !boardId) return;
+
+    handleTaskLoading(true);
 
     getTask(boardId, selectedTaskId)
       .then((json) => setTaskDetails(json.data))

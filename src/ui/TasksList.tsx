@@ -1,5 +1,6 @@
 import { TaskItem } from './TaskItem.tsx';
 import { useTasks } from '../bll/useTasks.ts';
+import styles from './TasksList.module.css';
 
 type TasksListProps = {
   selectedTaskId: string | null;
@@ -14,7 +15,7 @@ export function TasksList({
   handleBoardSelected,
   handleTaskLoading,
 }: TasksListProps) {
-  const { tasks, handleReset } = useTasks(handleTaskSelected);
+  const { tasks, handleReset } = useTasks(handleTaskSelected, handleBoardSelected);
 
   if (!tasks) {
     return <h1>Загрузка...</h1>;
@@ -27,9 +28,7 @@ export function TasksList({
   return (
     <div>
       <button onClick={handleReset}>Сброс</button>
-      <ul
-        style={{ display: 'flex', flexDirection: 'column', gap: '20px', paddingInlineStart: '0' }}
-      >
+      <ul className={styles.tasksList}>
         {tasks?.map((task) => {
           return (
             <TaskItem

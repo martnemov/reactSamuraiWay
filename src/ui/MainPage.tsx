@@ -1,6 +1,7 @@
 import { TasksList } from './TasksList.tsx';
 import { TaskDetails } from './TaskDetails.tsx';
 import { useTaskSelection } from '../bll/useTaskSelection.ts';
+import styles from './MainPage.module.css';
 
 export function MainPage() {
   const {
@@ -14,7 +15,7 @@ export function MainPage() {
 
   return (
     <div>
-      <div style={{ display: 'flex', gap: '30px' }}>
+      <div className={styles.mainPage}>
         <TasksList
           selectedTaskId={selectedTaskId}
           handleTaskSelected={handleTaskSelected}
